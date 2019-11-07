@@ -5,3 +5,7 @@ BugTracking_BackUp - Бэкап БД.
 PostgreSQL 4.11
 Java 8.221
 Spring Boot 2.1.8
+
+БД "BugTracking"
+Логин "postgres"
+Пароль "admin123"
