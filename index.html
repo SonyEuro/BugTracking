@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+    <link rel="shortcut icon" href="https://img.icons8.com/ios/50/000000/circled-m.png" type="image/png">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
+        integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+        crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+        integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title></title>
+    <style type="text/css">
+        .btn {
+            margin-left: 2px;
+            margin-bottom: 2px;
+            width: 130px;
+        }
+
+        td {
+            /* border: 1px #DDD solid; */
+            padding: 5px;
+            cursor: pointer;
+        }
+
+        .selected {
+            background-color: lightblue;
+            color: #FFF;
+        }
+
+        .orderBy {
+            background-color: lightslategrey;
+            color: #000;
+        }
+
+        .btns {
+            margin: auto;
+        }
+
+        .tables {
+            margin: auto;
+        }
+
+        .maintable {
+            text-align: center;
+            width: 60%;
+        }
+
+        table {
+            margin: auto;
+        }
+
+        #tblTasks #tblProjects {
+            width: 100%;
+        }
+
+        .tblEditor {
+            width: 100%;
+            text-align: right;
+        }
+    </style>
+</head>
+
+<body onload="Load()">
+    <!-- Modal AddProject -->
+    <div class="modal fade" id="modalAddProject" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLongTitle"><b>Проект</b></h5>
+                </div>
+                <div class="modal-body">
+                    <!-- Тело -->
+                    <table class="tblEditor">
+                        <tr>
+                            <td style="width:10%">
+                                <Label id="Label3">Наименование:</Label>
+                            </td>
+                            <td>
+                                <input ID="tbProjectName" type="text" style="width:100%">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <Label id="Label3">Описание:</Label>
+                            </td>
+                            <td>
+                                <textarea id="taProjectDescription" cols="30" rows="5" style="width:100%"></textarea>
+                            </td>
+                        </tr>
+                    </table>
+                    <!-- End Тело -->
+                </div>
+                <div class="modal-footer">
+                    <input ID="btnSaveProject" class="btn btn-primary" type="button" value="Сохранить"
+                        onclick="SaveProject()">
+                    <input ID="btnCloseProject" class="btn btn-secondary" type="button" value="Закрыть"
+                        onclick="CloseModal()">
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- End Modal AddProject-->
+    <!-- Modal AddTask -->
+    <div class="modal fade" id="modalAddTask" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLongTitle"><b>Задача</b></h5>
+                </div>
+                <div class="modal-body">
+                    <!-- Тело -->
+                    <table class="tblEditor">
+                        <tr>
+                            <td style="width:10%">
+                                <Label id="Label3">Наименование:</Label>
+                            </td>
+                            <td>
+                                <input ID="tbTaskName" type="text" style="width:100%">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <Label id="Label3">Описание:</Label>
+                            </td>
+                            <td>
+                                <!-- <input ID="tbTaskDescription" type="text"> -->
+                                <textarea id="taTaskDescription" cols="30" rows="5" style="width:100%"></textarea>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <Label id="Label3">Приоритет:</Label>
+                            </td>
+                            <td>
+                                <input ID="tbTaskPriority" type="text" style="width:100%">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <Label id="Label3">Состояние:</Label>
+                            </td>
+                            <td>
+                                <select id="slctTaskState" style="width:100%">
+                                    <option value="NEW" id=0>Новая</option>
+                                    <option value="INWORK" id=1>В работе</option>
+                                    <option value="CLOSED" id=2>Закрыта</option>
+                                </select>
+                            </td>
+                        </tr>
+                    </table>
+                    <!-- End Тело -->
+                </div>
+                <div class="modal-footer">
+                    <input ID="btnSaveTask" class="btn btn-primary" type="button" value="Сохранить"
+                        onclick="SaveTask()">
+                    <input ID="btnCloseTask" class="btn btn-secondary" type="button" value="Закрыть"
+                        onclick="CloseModal()">
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- End Modal AddTask-->
+    <form id="form1">
+        <h2 align="center">BugTracking</h2>
+        <table class='maintable'>
+            <tr>
+                <td>
+                    <div class="btns">
+                        <!-- <input ID="btnAddProject" class="btn btn-primary" type="button" value="Загрузить проекты"
+                            onclick="LoadProjects()"> -->
+                        <input ID="btnAddProject" class="btn btn-primary" type="button" value="Добавить"
+                            onclick="StartAddProject()">
+                        <input ID="btnEditProject" class="btn btn-primary" type="button" value="Редактировать"
+                            onclick="StartEditProject()">
+                        <input ID="btnDeleteProject" class="btn btn-primary" type="button" value="Удалить"
+                            onclick="DeleteProject()">
+                    </div>
+                    <div class="tables">
+                        <table id="tblProjects" border="1px"></table>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="3">
+                    <input ID="btnPrevPageProject" class="btn btn-secondary" type="button" value="Предыдущая"
+                        onclick="PrevPageProject()">
+                    <label id="lPagesProject">8 из 10</label>
+                    <input ID="btnNextPageProject" class="btn btn-secondary" type="button" value="Следущая"
+                        onclick="NextPageProject()">
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div class="btns">
+
+                        <input ID="btnAddTask" class="btn btn-primary" type="button" value="Добавить"
+                            onclick="StartAddTask()">
+
+                        <input ID="btnEditTask" class="btn btn-primary" type="button" value="Редактировать"
+                            onclick="StartEditTask()">
+
+                        <input ID="btnDeleteTask" class="btn btn-primary" type="button" value="Удалить"
+                            onclick="DeleteTask()">
+                        <input ID="btnFiltrTask" class="btn btn-primary" type="button" value="Фильтр"
+                            onclick="LoadTasks()">
+                    </div>
+                    <div>
+                        <table id="tblFilter">
+                            <tr>
+                                <td>
+                                    <div>По дате</div>
+                                    <div>От: <input id="dateFrom" type="date" value="1900-01-01"></div>
+                                    <div>До: <input id="dateTo" type="date" value="4000-12-31"></div>
+                                </td>
+                                <td>
+                                    <div>По приоритету</div>
+                                    <div>От: <input id="priorityFrom" type="text" value="0"></div>
+                                    <div>До: <input id="priorityTo" type="text" value="100"></div>
+                                </td>
+                                <td>
+                                    <div>По состоянию</div>
+                                    <div><input class="states" type="checkbox" value=0 checked> NEW</div>
+                                    <div><input class="states" type="checkbox" value=1 checked> INWORK</div>
+                                    <div><input class="states" type="checkbox" value=2 checked>    CLOSED</div>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="tables">
+                        <table id="tblTasks" border="1px"></table>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="3">
+                    <input ID="btnPrevPageTask" class="btn btn-secondary" type="button" value="Предыдущая"
+                        onclick="PrevPageTask()">
+                    <label id="lPagesTask">8 из 10</label>
+                    <input ID="btnNextPageTask" class="btn btn-secondary" type="button" value="Следущая"
+                        onclick="NextPageTask()">
+                </td>
+            </tr>
+        </table>
+    </form>
+</body>
+
+</html>
+<link href="~/Content/bootstrap.min.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="index.js"></script>
